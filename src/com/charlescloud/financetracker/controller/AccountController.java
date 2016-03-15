@@ -24,6 +24,14 @@ public class AccountController {
 
     }
 
+    public void saveAccounts(String fileName){
+        accountRepository.saveAccountsToFilesystem(fileName);
+    }
+
+    public void loadAccounts(String fileName){
+        accountRepository.loadAccountsFromFilesystem(fileName);
+    }
+
     public Account getAccountByName(String accountName){
         for (Account a : getAllAccounts()){
             if (a.getName().equals(accountName)){

@@ -27,6 +27,9 @@ public class Main {
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
+        //Load files
+        accountController.loadAccounts("financetracker.accounts");
+
         while(true) {
             String action;
             do {
@@ -101,6 +104,7 @@ public class Main {
                     }
                     break;
                 case "q":
+                    accountController.saveAccounts("financetracker.accounts");
                     return;
                 default:
 
