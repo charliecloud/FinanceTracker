@@ -1,10 +1,11 @@
 package com.charlescloud.financetracker.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Account {
+public class Account implements Serializable {
 
     //TODO: Add account provider
 
