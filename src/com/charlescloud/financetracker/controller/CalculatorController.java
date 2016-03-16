@@ -8,6 +8,6 @@ public class CalculatorController {
     //TODO: Write tests to confrim that it works for all numbers
     public float calculateTotalEarningsPercentage(Account account){
         //Need the current balance and the starting balance
-        return account.getBalance()/account.getPurchaseCost();
+        return (1-account.getPurchaseCost()/account.getBalance())*100;
     }
 }

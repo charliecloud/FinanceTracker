@@ -1,6 +1,7 @@
 package com.charlescloud.financetracker;
 
 import com.charlescloud.financetracker.controller.AccountController;
+import com.charlescloud.financetracker.controller.CalculatorController;
 import com.charlescloud.financetracker.controller.TransactionController;
 import com.charlescloud.financetracker.model.Account;
 import com.charlescloud.financetracker.model.AccountType;
@@ -24,6 +25,7 @@ public class Main {
 
         AccountController accountController = new AccountController();
         TransactionController transactionController = new TransactionController();
+        CalculatorController calculatorController = new CalculatorController();
 
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -97,7 +99,7 @@ public class Main {
                                 tHistory.getKey().toString(),
                                 tHistory.getValue().getAmount());
                     }
-                    //System.out.printf("Current earning  is: %f ",accountController.getAccountCalculator().calculateTotalEarningsPercentage(accountToView));
+                    System.out.printf("Current earning percentage is: %f ",calculatorController.calculateTotalEarningsPercentage(accountToView));
                     break;
                 case "q":
                     accountController.saveAccounts("financetracker.accounts");
