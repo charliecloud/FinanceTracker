@@ -23,7 +23,6 @@ public class TransactionController {
         return transactionRepository.getAllTransactions().size();
     }
 
-    //TODO: Write test case
     public List<Transaction> getTransactionsOfType(TransactionType transactionType){
         List<Transaction> transactions = new ArrayList<>();
         for (Transaction transaction : transactionRepository.getAllTransactions()){

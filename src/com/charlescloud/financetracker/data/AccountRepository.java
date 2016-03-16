@@ -37,7 +37,6 @@ public class AccountRepository {
     }
 
     public void loadAccountsFromFilesystem(String fileName){
-        //TODO: Make sure the file exists
         if(!new File(fileName).exists()){
             System.out.printf("File: %s does not exist", fileName);
             return;

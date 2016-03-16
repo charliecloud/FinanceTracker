@@ -19,6 +19,7 @@ public class Main {
         menuOptions.add("add account = a");
         menuOptions.add("update account = u");
         menuOptions.add("view account = v");
+        menuOptions.add("modify account = m");
         menuOptions.add("quit = q");
 
         AccountController accountController = new AccountController();
@@ -44,7 +45,7 @@ public class Main {
                 case "a":
                     String accountInfo;
                     do {
-                        System.out.println("Enter account information: name, id, balance, open, account type");
+                        System.out.println("Enter account information: name, id, purchase cost, balance, open, account type");
                         accountInfo = bufferedReader.readLine();
                     }while(accountInfo == null);
 
@@ -52,11 +53,12 @@ public class Main {
 
                     String name = input[0];
                     int id = Integer.parseInt(input[1]);
-                    Float balance = Float.parseFloat(input[2]);
-                    boolean open = Boolean.parseBoolean(input[3]);
-                    AccountType accountType = AccountType.valueOf(input[4]);
+                    Float purchaseCost = Float.parseFloat(input[2]);
+                    Float balance = Float.parseFloat(input[3]);
+                    boolean open = Boolean.parseBoolean(input[4]);
+                    AccountType accountType = AccountType.valueOf(input[5]);
 
-                    Account account = new Account(name, id, true, 0.0f, balance, open, accountType);
+                    Account account = new Account(name, id, true, purchaseCost, balance, open, accountType);
                     accountController.addAccount(account);
                     break;
                 case "u":
@@ -64,11 +66,7 @@ public class Main {
                         System.out.printf("No accounts! %n%n");
                         break;
                     }
-                    System.out.println("Which account to update? Insert name");
-
-                    for (Account a : accountController.getAllAccounts()) {
-                        System.out.println(a.getName());
-                    }
+                    printAllAccounts(accountController);
                     String accountChosen = bufferedReader.readLine();
                     System.out.println("What type of transaction would you like to do?");
                     for (TransactionType t : TransactionType.values()){
@@ -89,10 +87,7 @@ public class Main {
                         System.out.printf("No accounts! %n%n");
                         break;
                     }
-                    System.out.println("Which account to view?");
-                    for (Account a : accountController.getAllAccounts()) {
-                        System.out.println(a.getName());
-                    }
+                    printAllAccounts(accountController);
                     String accountView = bufferedReader.readLine();
                     Account accountToView = accountController.getAccountByName(accountView);
                     System.out.println(accountToView);
@@ -102,10 +97,20 @@ public class Main {
                                 tHistory.getKey().toString(),
                                 tHistory.getValue().getAmount());
                     }
+                    //System.out.printf("Current earning  is: %f ",accountController.getAccountCalculator().calculateTotalEarningsPercentage(accountToView));
                     break;
                 case "q":
                     accountController.saveAccounts("financetracker.accounts");
                     return;
+                case "m":
+                    printAllAccounts(accountController);
+                    System.out.println("Would you like to close the account? (y/n)");
+                    String closeAccount = bufferedReader.readLine().toLowerCase();
+                    while (!closeAccount.equals("y") && !closeAccount.equals("n")){
+                        System.out.println("Would you like to close the account? (y/n)");
+                        closeAccount = bufferedReader.readLine();
+                    }
+
                 default:
 
 
@@ -113,6 +118,13 @@ public class Main {
         }
 
 
+    }
+
+    public static void printAllAccounts(AccountController accountController){
+        System.out.println("Which account?");
+        for (Account a : accountController.getAllAccounts()) {
+            System.out.println(a.getName());
+        }
     }
 
 }

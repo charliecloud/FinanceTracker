@@ -33,7 +33,7 @@ public class Account implements Serializable {
         balanceHistory = new TreeMap<>();
         transactionHistory = new TreeMap<>();
 
-
+        //TODO: Add this as first transaction
         balanceHistory.put(new Date(),balance);
         lastUpdated = new Date();
     }

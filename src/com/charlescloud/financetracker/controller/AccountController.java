@@ -21,7 +21,6 @@ public class AccountController {
 
     public void addTransactionForAccount(Transaction transaction, String accountName){
         getAccountByName(accountName).addTransaction(transaction);
-
     }
 
     public void saveAccounts(String fileName){
