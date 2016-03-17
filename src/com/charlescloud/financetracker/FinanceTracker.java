@@ -48,7 +48,7 @@ public class FinanceTracker {
                 case "a":
                     String accountInfo;
                     do {
-                        System.out.println("Enter account information: name, id, purchase cost, balance, open, account type");
+                        System.out.println("Enter account information: name, provider, id, purchase cost, balance, open, account type");
                         accountInfo = bufferedReader.readLine();
                     } while (accountInfo == null);
 
@@ -56,13 +56,14 @@ public class FinanceTracker {
 
                     //TODO: Check for correct amount of input and sanitize it
                     String name = input[0];
-                    int id = Integer.parseInt(input[1]);
-                    Float purchaseCost = Float.parseFloat(input[2]);
-                    Float balance = Float.parseFloat(input[3]);
-                    boolean open = Boolean.parseBoolean(input[4]);
-                    AccountType accountType = AccountType.valueOf(input[5]);
+                    String provider = input[1];
+                    int id = Integer.parseInt(input[2]);
+                    Float purchaseCost = Float.parseFloat(input[3]);
+                    Float balance = Float.parseFloat(input[4]);
+                    boolean open = Boolean.parseBoolean(input[5]);
+                    AccountType accountType = AccountType.valueOf(input[6]);
 
-                    accountController.createNewAccount(name, id, true, purchaseCost, balance, open, accountType);
+                    accountController.createNewAccount(name, provider, id, true, purchaseCost, balance, open, accountType);
                     break;
                 case "u":
                     if(checkForAccounts()) {

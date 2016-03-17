@@ -19,7 +19,7 @@ public class AccountControllerTest {
     public void setUp() throws Exception {
         //account = new Account("test1", 1, false, 0.0f, 10f, true, AccountType.CD);
         accountController = new AccountController();
-        accountController.createNewAccount("test1", 1, false, 0.0f, 10f, true, AccountType.CD);
+        accountController.createNewAccount("test1", "sample", 1, false, 0.0f, 10f, true, AccountType.CD);
 
     }
 

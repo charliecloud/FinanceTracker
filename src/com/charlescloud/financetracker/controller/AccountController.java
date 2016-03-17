@@ -18,8 +18,8 @@ public class AccountController {
         accountRepository = new AccountRepository(new ArrayList<>());
     }
 
-    public void createNewAccount(String name, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
-        Account account = new Account(name, id, taxable, purchaseCost, balance, open, accountType);
+    public void createNewAccount(String name, String provider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
+        Account account = new Account(name, provider, id, taxable, purchaseCost, balance, open, accountType);
         accountRepository.addAccount(account);
     }
 

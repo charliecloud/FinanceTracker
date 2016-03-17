@@ -8,10 +8,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Account implements Serializable {
-
-    //TODO: Add account provider
-
     private String name;
+    private String accountProvider;
     private int id;
     private Date lastUpdated;
     private boolean taxable;
@@ -25,8 +23,9 @@ public class Account implements Serializable {
     private AccountCalculator accountCalculator;
 
 
-    public Account(String name, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType) {
+    public Account(String name, String accountProvider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType) {
         this.name = name;
+        this.accountProvider = accountProvider;
         this.id = id;
         this.taxable = taxable;
         this.purchaseCost = purchaseCost;
@@ -42,7 +41,6 @@ public class Account implements Serializable {
         lastUpdated = new Date();
     }
 
-    //TODO: Write test case to verify correct behavior for each transaction type
     public void addTransaction(Transaction transaction){
         Date date = transaction.getDate();
         transactionHistory.put(date, transaction);
