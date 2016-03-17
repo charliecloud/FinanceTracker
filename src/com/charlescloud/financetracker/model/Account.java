@@ -37,13 +37,32 @@ public class Account implements Serializable {
         lastUpdated = new Date();
     }
 
+    //TODO: Write test case to verify correct behavior for each transaction type
     public void addTransaction(Transaction transaction){
         Date date = transaction.getDate();
         transactionHistory.put(date, transaction);
         //TODO: Action based on transaction type
-        if(transaction.getType() == TransactionType.BALANCE_UPDATE){
-            addBalanceUpdate(date, transaction.getAmount());
+        switch(transaction.getType()){
+            case ACCOUNT_OPEN:
+                addBalanceUpdate(date, transaction.getAmount());
+                break;
+            case BALANCE_UPDATE:
+                addBalanceUpdate(date, transaction.getAmount());
+                break;
+            case DIVIDEND_PAYOUT:
+                addBalanceUpdate(date, transaction.getAmount());
+                break;
+            case INTEREST_PAYOUT:
+                addBalanceUpdate(date, transaction.getAmount());
+                break;
+            case CASH_IN:
+                addBalanceUpdate(date, (transaction.getAmount()+this.balance));
+                break;
+            case CASH_OUT:
+                addBalanceUpdate(date, (this.balance-transaction.getAmount()));
+                break;
         }
+        //update date
         this.lastUpdated = date;
     }
 
