@@ -23,14 +23,6 @@ public class AccountController {
         getAccountByName(accountName).addTransaction(transaction);
     }
 
-    public void saveAccounts(String fileName){
-        accountRepository.saveAccountsToFilesystem(fileName);
-    }
-
-    public void loadAccounts(String fileName){
-        accountRepository.loadAccountsFromFilesystem(fileName);
-    }
-
     public Account getAccountByName(String accountName){
         for (Account a : getAllAccounts()){
             if (a.getName().equals(accountName)){
@@ -40,14 +32,6 @@ public class AccountController {
         return null;
     }
 
-    public List<Account> getAllAccounts() {
-        return accountRepository.getAllAccounts();
-    }
-
-    public int getNumberOfAccounts(){
-        return accountRepository.getAllAccounts().size();
-    }
-
     public boolean markAccountAsClosed(String accountName){
         Account account = getAccountByName(accountName);
         if (account.equals(null)){
@@ -55,5 +39,21 @@ public class AccountController {
         }
         account.setOpen(false);
         return true;
+    }
+
+    public void saveAccounts(String fileName){
+        accountRepository.saveAccountsToFilesystem(fileName);
+    }
+
+    public void loadAccounts(String fileName){
+        accountRepository.loadAccountsFromFilesystem(fileName);
+    }
+
+    public List<Account> getAllAccounts() {
+        return accountRepository.getAllAccounts();
+    }
+
+    public int getNumberOfAccounts(){
+        return accountRepository.getAllAccounts().size();
     }
 }
