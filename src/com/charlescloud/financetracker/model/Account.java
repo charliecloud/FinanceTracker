@@ -57,6 +57,7 @@ public class Account implements Serializable {
             case CASH_IN:
                 addBalanceUpdate(date, (transaction.getAmount()+this.balance));
                 break;
+            //TODO: Make sure you have enough cash to not go negative?
             case CASH_OUT:
                 addBalanceUpdate(date, (this.balance-transaction.getAmount()));
                 break;

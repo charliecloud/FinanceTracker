@@ -70,6 +70,7 @@ public class FinanceTracker {
                     break;
                 case "u":
                     if(checkForAccounts()) {
+                        //TODO: Not allow transactions on closed accounts
                         printAllAccounts(accountController);
                         String accountChosen = bufferedReader.readLine();
                         System.out.println("What type of transaction would you like to do?");
@@ -86,7 +87,7 @@ public class FinanceTracker {
                         transactionController.addTransactionToRepository(transaction);
                     }
                     break;
-                case "v":
+                case "vh":
                     if (checkForAccounts()) {
                         printAllAccounts(accountController);
                         String accountView = bufferedReader.readLine();
@@ -98,13 +99,26 @@ public class FinanceTracker {
                                     tHistory.getKey().toString(),
                                     tHistory.getValue().getAmount());
                         }
-                        System.out.printf("Current earning percentage is: %f ", calculatorController.calculateTotalEarningsPercentage(accountToView));
+                        System.out.printf("Current earning percentage is: %f %n%n", calculatorController.calculateTotalEarningsPercentage(accountToView));
+                    }
+                    break;
+                case "vb":
+                    if (checkForAccounts()) {
+                        printAllAccounts(accountController);
+                        String accountView = bufferedReader.readLine();
+                        Account accountToView = accountController.getAccountByName(accountView);
+                        System.out.println(accountToView);
+                        for (Map.Entry<Date, Float> bHistory : accountToView.getBalanceHistory().entrySet()) {
+                            System.out.printf("Date is: %s, Balance is %f %n",
+                                    bHistory.getKey().toString(),
+                                    bHistory.getValue());
+                        }
                     }
                     break;
                 case "q":
                     accountController.saveAccounts("financetracker.accounts");
                     return;
-                case "m":
+                case "c":
                     if (checkForAccounts()) {
                         printAllAccounts(accountController);
                         String closeAccount = bufferedReader.readLine().toLowerCase();
@@ -130,9 +144,10 @@ public class FinanceTracker {
     public void populateMenuOptions(){
         menuOptions = new ArrayList<>();
         menuOptions.add("add account = a");
-        menuOptions.add("update account = u");
-        menuOptions.add("view account = v");
-        menuOptions.add("modify account = m");
+        menuOptions.add("add transaction for account = u");
+        menuOptions.add("view account transaction history = vh");
+        menuOptions.add("view account balance history = vb");
+        menuOptions.add("close account = c");
         menuOptions.add("quit = q");
     }
 
