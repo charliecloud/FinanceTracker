@@ -1,7 +1,6 @@
 package com.charlescloud.financetracker;
 
 import com.charlescloud.financetracker.controller.AccountController;
-import com.charlescloud.financetracker.controller.CalculatorController;
 import com.charlescloud.financetracker.controller.TransactionController;
 import com.charlescloud.financetracker.model.Account;
 import com.charlescloud.financetracker.model.AccountType;
@@ -19,14 +18,12 @@ import java.util.Map;
 public class FinanceTracker {
     private AccountController accountController;
     private TransactionController transactionController;
-    private CalculatorController calculatorController;
 
     private List<String> menuOptions;
 
     public FinanceTracker() {
         this.accountController = new AccountController();
         this.transactionController = new TransactionController();
-        this.calculatorController = new CalculatorController();
 
         populateMenuOptions();
         //Load files
@@ -98,7 +95,8 @@ public class FinanceTracker {
                                     tHistory.getKey().toString(),
                                     tHistory.getValue().getAmount());
                         }
-//                        System.out.printf("Current earning percentage is: %f %n%n", calculatorController.calculateTotalEarningsPercentage(accountToView));
+                        System.out.printf("Current earning percentage is: %f %n%n",
+                                accountController.calculateTotalAccountEarningPercentage(accountView));
                     }
                     break;
                 case "vb":

@@ -53,6 +53,10 @@ public class AccountController {
         return true;
     }
 
+    public float calculateTotalAccountEarningPercentage(String accountName){
+        return getAccountByName(accountName).getTotalEarningsPercentage();
+    }
+
     public void saveAccounts(String fileName){
         accountRepository.saveAccountsToFilesystem(fileName);
     }

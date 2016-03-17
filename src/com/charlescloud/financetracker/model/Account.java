@@ -1,5 +1,7 @@
 package com.charlescloud.financetracker.model;
 
+import com.charlescloud.financetracker.controller.AccountCalculator;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
@@ -20,6 +22,8 @@ public class Account implements Serializable {
     private Map<Date, Transaction> transactionHistory;
     private AccountType accountType;
 
+    private AccountCalculator accountCalculator;
+
 
     public Account(String name, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType) {
         this.name = name;
@@ -32,6 +36,7 @@ public class Account implements Serializable {
 
         balanceHistory = new TreeMap<>();
         transactionHistory = new TreeMap<>();
+        accountCalculator = new AccountCalculator();
 
         addTransaction(new Transaction(new Date(),TransactionType.ACCOUNT_OPEN,balance,false));
         lastUpdated = new Date();
@@ -69,6 +74,10 @@ public class Account implements Serializable {
     private void addBalanceUpdate(Date date, Float balance){
         balanceHistory.put(date, balance);
         this.balance = balance;
+    }
+
+    public float getTotalEarningsPercentage(){
+        return accountCalculator.calculateTotalEarningsPercentage(this.purchaseCost, this.balance);
     }
 
     public String getName() {
