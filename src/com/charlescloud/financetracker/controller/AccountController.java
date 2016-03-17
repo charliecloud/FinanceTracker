@@ -2,10 +2,13 @@ package com.charlescloud.financetracker.controller;
 
 import com.charlescloud.financetracker.data.AccountRepository;
 import com.charlescloud.financetracker.model.Account;
+import com.charlescloud.financetracker.model.AccountType;
 import com.charlescloud.financetracker.model.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class AccountController {
 
@@ -15,12 +18,21 @@ public class AccountController {
         accountRepository = new AccountRepository(new ArrayList<>());
     }
 
-    public void addAccount(Account account){
+    public void createNewAccount(String name, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
+        Account account = new Account(name, id, taxable, purchaseCost, balance, open, accountType);
         accountRepository.addAccount(account);
     }
 
     public void addTransactionForAccount(Transaction transaction, String accountName){
         getAccountByName(accountName).addTransaction(transaction);
+    }
+
+    public Map<Date, Transaction> getTransactionsForAccount(String accountName){
+        return getAccountByName(accountName).getTransactionHistory();
+    }
+
+    public Map<Date, Float> getBalancesForAccount(String accountName){
+        return getAccountByName(accountName).getBalanceHistory();
     }
 
     public Account getAccountByName(String accountName){

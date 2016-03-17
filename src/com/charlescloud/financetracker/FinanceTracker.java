@@ -65,8 +65,7 @@ public class FinanceTracker {
                     boolean open = Boolean.parseBoolean(input[4]);
                     AccountType accountType = AccountType.valueOf(input[5]);
 
-                    Account account = new Account(name, id, true, purchaseCost, balance, open, accountType);
-                    accountController.addAccount(account);
+                    accountController.createNewAccount(name, id, true, purchaseCost, balance, open, accountType);
                     break;
                 case "u":
                     if(checkForAccounts()) {
@@ -87,28 +86,28 @@ public class FinanceTracker {
                         transactionController.addTransactionToRepository(transaction);
                     }
                     break;
-                case "vh":
+                case "vt":
                     if (checkForAccounts()) {
                         printAllAccounts(accountController);
                         String accountView = bufferedReader.readLine();
-                        Account accountToView = accountController.getAccountByName(accountView);
-                        System.out.println(accountToView);
-                        for (Map.Entry<Date, Transaction> tHistory : accountToView.getTransactionHistory().entrySet()) {
+//                        Account accountToView = accountController.getAccountByName(accountView);
+//                        System.out.println(accountToView);
+                        for (Map.Entry<Date, Transaction> tHistory : accountController.getTransactionsForAccount(accountView).entrySet()) {
                             System.out.printf("Transaction Type is %s, Date is: %s, Amount is %f %n",
                                     tHistory.getValue().getType(),
                                     tHistory.getKey().toString(),
                                     tHistory.getValue().getAmount());
                         }
-                        System.out.printf("Current earning percentage is: %f %n%n", calculatorController.calculateTotalEarningsPercentage(accountToView));
+//                        System.out.printf("Current earning percentage is: %f %n%n", calculatorController.calculateTotalEarningsPercentage(accountToView));
                     }
                     break;
                 case "vb":
                     if (checkForAccounts()) {
                         printAllAccounts(accountController);
                         String accountView = bufferedReader.readLine();
-                        Account accountToView = accountController.getAccountByName(accountView);
-                        System.out.println(accountToView);
-                        for (Map.Entry<Date, Float> bHistory : accountToView.getBalanceHistory().entrySet()) {
+//                        Account accountToView = accountController.getAccountByName(accountView);
+//                        System.out.println(accountToView);
+                        for (Map.Entry<Date, Float> bHistory : accountController.getBalancesForAccount(accountView).entrySet()) {
                             System.out.printf("Date is: %s, Balance is %f %n",
                                     bHistory.getKey().toString(),
                                     bHistory.getValue());
@@ -145,7 +144,7 @@ public class FinanceTracker {
         menuOptions = new ArrayList<>();
         menuOptions.add("add account = a");
         menuOptions.add("add transaction for account = u");
-        menuOptions.add("view account transaction history = vh");
+        menuOptions.add("view account transaction history = vt");
         menuOptions.add("view account balance history = vb");
         menuOptions.add("close account = c");
         menuOptions.add("quit = q");
