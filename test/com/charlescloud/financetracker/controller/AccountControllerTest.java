@@ -47,4 +47,35 @@ public class AccountControllerTest {
                 TransactionType.CASH_OUT,5f,true),"test1");
         assertEquals(55f, accountController.getAllAccounts().get(0).getBalance(),0);
     }
+
+    @Test
+    public void nullAccountIsClosed() throws Exception {
+        assertEquals(false,accountController.isAccountOpen("falseTest"));
+    }
+
+    @Test
+    public void nullAccountReturnsEmptyTransactionMap() throws Exception {
+        assertEquals(0,accountController.getTransactionsForAccount("falseTest").size());
+    }
+
+    @Test
+    public void nullAccountDoesNotAllowAddingOfTransactions() throws Exception {
+        assertEquals(false, accountController.addTransactionToAccount(new Transaction(new Date(),
+                TransactionType.BALANCE_UPDATE,50f,false),"falseTest"));
+
+    }
+
+    @Test
+    public void nullAccountReturnsEmptyBalanceMap() throws Exception {
+       assertEquals(0,accountController.getBalancesForAccount("falseTest").size());
+    }
+
+    @Test
+    public void accountReturnsCorrectBalances() throws Exception {
+        assertEquals(1,accountController.getBalancesForAccount("test1").size());
+        Transaction transaction = new Transaction(new Date(), TransactionType.BALANCE_UPDATE, 100f, true);
+        //FIXME: Failing test
+        accountController.addTransactionToAccount(transaction, "test1");
+        assertEquals(2, accountController.getBalancesForAccount("test1").size());
+    }
 }

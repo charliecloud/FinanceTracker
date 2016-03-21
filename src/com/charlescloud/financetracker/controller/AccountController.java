@@ -5,10 +5,7 @@ import com.charlescloud.financetracker.model.Account;
 import com.charlescloud.financetracker.model.AccountType;
 import com.charlescloud.financetracker.model.Transaction;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AccountController {
 
@@ -22,19 +19,6 @@ public class AccountController {
         this.accountRepository = accountRepository;
     }
 
-    public void addAccountToRepository(Account account){
-        accountRepository.addAccount(account);
-    }
-
-    public boolean isAccountOpen(String accountName){
-        Account account = getAccountByName(accountName);
-        if(account != null) {
-            return getAccountByName(accountName).isOpen();
-        }else{
-            return false;
-        }
-    }
-
     public Account createNewAccount(String name, String provider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
         Account account = new Account(name, provider, id, taxable, purchaseCost, balance, open, accountType);
         accountRepository.addAccount(account);
@@ -43,7 +27,7 @@ public class AccountController {
 
     public boolean addTransactionToAccount(Transaction transaction, String accountName){
         Account account = getAccountByName(accountName);
-        if (account.isOpen()){
+        if (account != null && account.isOpen()){
             account.addTransaction(transaction);
             return true;
         }
@@ -52,11 +36,21 @@ public class AccountController {
     }
 
     public Map<Date, Transaction> getTransactionsForAccount(String accountName){
-        return getAccountByName(accountName).getTransactionHistory();
+        Map<Date, Transaction> transactions = new TreeMap<>();
+        Account account = getAccountByName(accountName);
+        if(account != null){
+            return account.getTransactionHistory();
+        }
+        return transactions;
     }
 
     public Map<Date, Float> getBalancesForAccount(String accountName){
-        return getAccountByName(accountName).getBalanceHistory();
+        Map<Date, Float> balances = new TreeMap<>();
+        Account account = getAccountByName(accountName);
+        if (account != null) {
+            balances =  getAccountByName(accountName).getBalanceHistory();
+        }
+        return balances;
     }
 
     public Account getAccountByName(String accountName){
@@ -78,7 +72,21 @@ public class AccountController {
     }
 
     public float calculateTotalAccountEarningPercentage(String accountName){
+        //TODO: Return null or 0 if not an account?
         return getAccountByName(accountName).getTotalEarningsPercentage();
+    }
+
+    public boolean isAccountOpen(String accountName){
+        Account account = getAccountByName(accountName);
+        if(account != null) {
+            return getAccountByName(accountName).isOpen();
+        }else{
+            return false;
+        }
+    }
+
+    public void addAccountToRepository(Account account){
+        accountRepository.addAccount(account);
     }
 
     public void saveAccounts(String fileName){
