@@ -15,6 +15,10 @@ public class TransactionController {
         this.transactionRepository = new TransactionRepository(new ArrayList<>());
     }
 
+    public TransactionController(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
+    }
+
     public void addTransactionToRepository(Transaction transaction){
         transactionRepository.addTransaction(transaction);
     }

@@ -1,6 +1,6 @@
 package com.charlescloud.financetracker.model;
 
-import com.charlescloud.financetracker.controller.AccountCalculator;
+import com.charlescloud.financetracker.AccountCalculator;
 
 import java.io.Serializable;
 import java.util.Date;
