@@ -47,4 +47,9 @@ public class Transaction implements Serializable {
     public void setAutomatic(boolean automatic) {
         this.automatic = automatic;
     }
+
+    @Override
+    public String toString() {
+        return "Transaction Type is: "+this.type+"  Date is: "+date.toString()+" Amount is: "+amount;
+    }
 }
