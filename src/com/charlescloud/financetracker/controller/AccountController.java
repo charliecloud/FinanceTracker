@@ -22,13 +22,33 @@ public class AccountController {
         this.accountRepository = accountRepository;
     }
 
-    public void createNewAccount(String name, String provider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
-        Account account = new Account(name, provider, id, taxable, purchaseCost, balance, open, accountType);
+    public void addAccountToRepository(Account account){
         accountRepository.addAccount(account);
     }
 
-    public void addTransactionForAccount(Transaction transaction, String accountName){
-        getAccountByName(accountName).addTransaction(transaction);
+    public boolean isAccountOpen(String accountName){
+        Account account = getAccountByName(accountName);
+        if(account != null) {
+            return getAccountByName(accountName).isOpen();
+        }else{
+            return false;
+        }
+    }
+
+    public Account createNewAccount(String name, String provider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
+        Account account = new Account(name, provider, id, taxable, purchaseCost, balance, open, accountType);
+        accountRepository.addAccount(account);
+        return account;
+    }
+
+    public boolean addTransactionToAccount(Transaction transaction, String accountName){
+        Account account = getAccountByName(accountName);
+        if (account.isOpen()){
+            account.addTransaction(transaction);
+            return true;
+        }
+        return false;
+
     }
 
     public Map<Date, Transaction> getTransactionsForAccount(String accountName){
@@ -50,7 +70,7 @@ public class AccountController {
 
     public boolean markAccountAsClosed(String accountName){
         Account account = getAccountByName(accountName);
-        if (account.equals(null)){
+        if (account == null || !account.isOpen()){
             return false;
         }
         account.setOpen(false);
