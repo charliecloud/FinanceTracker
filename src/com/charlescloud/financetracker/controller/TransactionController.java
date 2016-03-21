@@ -5,6 +5,7 @@ import com.charlescloud.financetracker.model.Transaction;
 import com.charlescloud.financetracker.model.TransactionType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TransactionController {
@@ -23,6 +24,12 @@ public class TransactionController {
         transactionRepository.addTransaction(transaction);
     }
 
+    public Transaction createTransaction(Date date, TransactionType transactionType, Float amount, boolean automatic){
+        Transaction transaction = new Transaction(date, transactionType, amount, automatic);
+        addTransactionToRepository(transaction);
+        return transaction;
+    }
+
     public int getNumberOfTransactions(){
         return transactionRepository.getAllTransactions().size();
     }
@@ -36,5 +43,13 @@ public class TransactionController {
             }
         }
         return transactions;
+    }
+
+    public void saveTransactions(String fileName){
+        transactionRepository.saveTransactionsToFilesystem(fileName);
+    }
+
+    public void loadTransactions(String fileName){
+        transactionRepository.loadTransactionsFromFilesystem(fileName);
     }
 }
