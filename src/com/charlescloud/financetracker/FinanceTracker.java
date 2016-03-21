@@ -64,6 +64,7 @@ public class FinanceTracker {
                     AccountType accountType = AccountType.valueOf(input[6]);
 
                     accountController.createNewAccount(name, provider, id, true, purchaseCost, balance, open, accountType);
+                    //TODO: Need a way to add the original account creation transaction to transaction repo
                     break;
                 case "u":
                     if(checkForAccounts()) {
@@ -83,6 +84,17 @@ public class FinanceTracker {
                         accountController.addTransactionForAccount(transaction, accountChosen);
                         transactionController.addTransactionToRepository(transaction);
                     }
+                    break;
+                case "gt":
+                        System.out.println("What transaction type do you want to see?");
+                        for (TransactionType t : TransactionType.values()) {
+                            System.out.println(t);
+                        }
+                        TransactionType transactionType = TransactionType.valueOf(bufferedReader.readLine());
+                        List<Transaction> transactions = transactionController.getTransactionsOfType(transactionType);
+                        for (Transaction transaction : transactions) {
+                            System.out.println(transaction);
+                        }
                     break;
                 case "vt":
                     if (checkForAccounts()) {
@@ -143,6 +155,7 @@ public class FinanceTracker {
         menuOptions = new ArrayList<>();
         menuOptions.add("add account = a");
         menuOptions.add("add transaction for account = u");
+        menuOptions.add("get all transactions of a certain type = gt");
         menuOptions.add("view account transaction history = vt");
         menuOptions.add("view account balance history = vb");
         menuOptions.add("close account = c");
