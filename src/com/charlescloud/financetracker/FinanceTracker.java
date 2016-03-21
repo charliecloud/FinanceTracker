@@ -28,6 +28,7 @@ public class FinanceTracker {
         populateMenuOptions();
         //Load files
         accountController.loadAccounts("financetracker.accounts");
+        transactionController.loadTransactions("financetracker.transactions");
     }
 
     public void run() throws IOException {
@@ -62,27 +63,31 @@ public class FinanceTracker {
                     Float balance = Float.parseFloat(input[4]);
                     boolean open = Boolean.parseBoolean(input[5]);
                     AccountType accountType = AccountType.valueOf(input[6]);
-
+                    //
                     accountController.createNewAccount(name, provider, id, true, purchaseCost, balance, open, accountType);
-                    //TODO: Need a way to add the original account creation transaction to transaction repo
+                    transactionController.createTransaction(new Date(), TransactionType.ACCOUNT_OPEN, balance, false);
                     break;
-                case "u":
+                case "at":
                     if(checkForAccounts()) {
-                        //TODO: Not allow transactions on closed accounts
                         printAllAccounts(accountController);
                         String accountChosen = bufferedReader.readLine();
-                        System.out.println("What type of transaction would you like to do?");
-                        for (TransactionType t : TransactionType.values()) {
-                            System.out.println(t);
+                        if(accountController.isAccountOpen(accountChosen)) {
+                            System.out.println("What type of transaction would you like to do?");
+                            for (TransactionType t : TransactionType.values()) {
+                                System.out.println(t);
+                            }
+                            TransactionType transactionType = TransactionType.valueOf(bufferedReader.readLine());
+                            System.out.println("What is the amount of the transaction?");
+                            Float transactionAmount = Float.parseFloat(bufferedReader.readLine());
+                            System.out.println("Was it automatic?");
+                            boolean automatic = Boolean.parseBoolean(bufferedReader.readLine());
+                            Transaction newTransaction = transactionController.createTransaction(new Date(), transactionType, transactionAmount, automatic);
+                            accountController.addTransactionToAccount(newTransaction, accountChosen);
+                            System.out.printf("Transaction created %n");
                         }
-                        TransactionType transactionType = TransactionType.valueOf(bufferedReader.readLine());
-                        System.out.println("What is the amount of the transaction?");
-                        Float transactionAmount = Float.parseFloat(bufferedReader.readLine());
-                        System.out.println("Was it automatic?");
-                        boolean automatic = Boolean.parseBoolean(bufferedReader.readLine());
-                        Transaction transaction = new Transaction(new Date(), transactionType, transactionAmount, automatic);
-                        accountController.addTransactionForAccount(transaction, accountChosen);
-                        transactionController.addTransactionToRepository(transaction);
+                        else{
+                            System.out.printf("Account: %s is closed or does not exist %n ", accountChosen);
+                        }
                     }
                     break;
                 case "gt":
@@ -92,21 +97,18 @@ public class FinanceTracker {
                         }
                         TransactionType transactionType = TransactionType.valueOf(bufferedReader.readLine());
                         List<Transaction> transactions = transactionController.getTransactionsOfType(transactionType);
-                        for (Transaction transaction : transactions) {
-                            System.out.println(transaction);
+                        if(transactions.size() > 0) {
+                            for (Transaction newTransaction : transactions) {
+                                System.out.println(newTransaction);
+                            }
                         }
                     break;
                 case "vt":
                     if (checkForAccounts()) {
                         printAllAccounts(accountController);
                         String accountView = bufferedReader.readLine();
-//                        Account accountToView = accountController.getAccountByName(accountView);
-//                        System.out.println(accountToView);
                         for (Map.Entry<Date, Transaction> tHistory : accountController.getTransactionsForAccount(accountView).entrySet()) {
-                            System.out.printf("Transaction Type is %s, Date is: %s, Amount is %f %n",
-                                    tHistory.getValue().getType(),
-                                    tHistory.getKey().toString(),
-                                    tHistory.getValue().getAmount());
+                            System.out.println(tHistory.getValue());
                         }
                         System.out.printf("Current earning percentage is: %f %n%n",
                                 accountController.calculateTotalAccountEarningPercentage(accountView));
@@ -116,8 +118,6 @@ public class FinanceTracker {
                     if (checkForAccounts()) {
                         printAllAccounts(accountController);
                         String accountView = bufferedReader.readLine();
-//                        Account accountToView = accountController.getAccountByName(accountView);
-//                        System.out.println(accountToView);
                         for (Map.Entry<Date, Float> bHistory : accountController.getBalancesForAccount(accountView).entrySet()) {
                             System.out.printf("Date is: %s, Balance is %f %n",
                                     bHistory.getKey().toString(),
@@ -127,18 +127,25 @@ public class FinanceTracker {
                     break;
                 case "q":
                     accountController.saveAccounts("financetracker.accounts");
+                    transactionController.saveTransactions("financetracker.transactions");
                     return;
                 case "c":
                     if (checkForAccounts()) {
                         printAllAccounts(accountController);
-                        String closeAccount = bufferedReader.readLine().toLowerCase();
-                        while (!closeAccount.equals("y") && !closeAccount.equals("n")) {
+                        String accountToClose = bufferedReader.readLine();
+                        String boolCloseAccount = "";
+                        while (!boolCloseAccount.equals("y") && !boolCloseAccount.equals("n")) {
                             System.out.println("Would you like to close the account? (y/n)");
-                            closeAccount = bufferedReader.readLine();
+                            boolCloseAccount = bufferedReader.readLine();
                         }
-                        switch (closeAccount){
+                        switch (boolCloseAccount){
                             case "y":
-                                accountController.markAccountAsClosed(closeAccount);
+                                boolean accountClosed = accountController.markAccountAsClosed(accountToClose);
+                                if (accountClosed){
+                                    System.out.println("Account: "+accountToClose+" closed");
+                                }else{
+                                    System.out.println("Could not close account");
+                                }
                                 break;
                             case "n":
                                 break;
@@ -154,11 +161,11 @@ public class FinanceTracker {
     public void populateMenuOptions(){
         menuOptions = new ArrayList<>();
         menuOptions.add("add account = a");
-        menuOptions.add("add transaction for account = u");
-        menuOptions.add("get all transactions of a certain type = gt");
+        menuOptions.add("add transaction for account = at");
         menuOptions.add("view account transaction history = vt");
         menuOptions.add("view account balance history = vb");
         menuOptions.add("close account = c");
+        menuOptions.add("get all transactions of a certain type = gt");
         menuOptions.add("quit = q");
     }
 
