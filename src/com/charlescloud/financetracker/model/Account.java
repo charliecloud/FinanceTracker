@@ -54,7 +54,7 @@ public class Account implements Serializable {
             case DIVIDEND_REINVEST:
                 addBalanceUpdate(date, (transaction.getAmount()+this.balance));
                 break;
-            case INTEREST_PAYOUT:
+            case INTEREST_REINVEST:
                 addBalanceUpdate(date, (transaction.getAmount()+this.balance));
                 break;
             case CONTRIBUTION:
