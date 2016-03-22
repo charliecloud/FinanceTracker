@@ -23,11 +23,11 @@ public class TransactionControllerTest {
     @Test
     public void transactionsOfTypeReturnsCorrectTransactions() throws Exception {
         Date date = new Date();
-        Transaction transaction = new Transaction(date, TransactionType.CASH_IN,100f,false);
+        Transaction transaction = new Transaction(date, TransactionType.CONTRIBUTION,100f,false);
         Transaction transaction2 = new Transaction(date, TransactionType.BALANCE_UPDATE, 100f, false);
         transactionController.addTransactionToRepository(transaction);
         transactionController.addTransactionToRepository(transaction2);
-        List<Transaction> transactions = transactionController.getTransactionsOfType(TransactionType.CASH_IN);
+        List<Transaction> transactions = transactionController.getTransactionsOfType(TransactionType.CONTRIBUTION);
         assertEquals(transaction, transactions.get(0));
         assertEquals(1, transactions.size());
         assertNotEquals(2, transactions.size());

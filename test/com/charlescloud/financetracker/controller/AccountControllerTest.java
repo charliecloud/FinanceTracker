@@ -44,7 +44,7 @@ public class AccountControllerTest {
                 TransactionType.DIVIDEND_REINVEST,10f,true),"test1");
         assertEquals(60f, accountController.getAllAccounts().get(0).getBalance(),0);
         accountController.addTransactionToAccount(new Transaction(new Date(),
-                TransactionType.CASH_OUT,5f,true),"test1");
+                TransactionType.WITHDRAWAL,5f,true),"test1");
         assertEquals(55f, accountController.getAllAccounts().get(0).getBalance(),0);
     }
 
