@@ -135,6 +135,7 @@ public class Account implements Serializable {
         return accountType;
     }
 
+    //TODO: Rewrite this to look nicer.
     @Override
     public String toString() {
         return "Account{" +

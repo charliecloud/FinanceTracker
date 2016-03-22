@@ -125,6 +125,18 @@ public class FinanceTracker {
                         }
                     }
                     break;
+                case "va":
+                    if (checkForAccounts()) {
+                        System.out.println("What account type do you want to see?");
+                        for (AccountType a : AccountType.values()) {
+                            System.out.println(a);
+                        }
+                        AccountType atype = AccountType.valueOf(bufferedReader.readLine());
+                        for (Account a : accountController.getAccountsOfType(atype)){
+                            System.out.println(a);
+                        }
+                    }
+                    break;
                 case "q":
                     accountController.saveAccounts("financetracker.accounts");
                     transactionController.saveTransactions("financetracker.transactions");
@@ -166,6 +178,7 @@ public class FinanceTracker {
         menuOptions.add("view account balance history = vb");
         menuOptions.add("close account = c");
         menuOptions.add("get all transactions of a certain type = gt");
+        menuOptions.add("view all accounts of a certain type = va");
         menuOptions.add("quit = q");
     }
 

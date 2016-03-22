@@ -21,59 +21,8 @@ public class AccountController {
 
     public Account createNewAccount(String name, String provider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
         Account account = new Account(name, provider, id, taxable, purchaseCost, balance, open, accountType);
-        accountRepository.addAccount(account);
+        addAccountToRepository(account);
         return account;
-    }
-
-    public boolean addTransactionToAccount(Transaction transaction, String accountName){
-        Account account = getAccountByName(accountName);
-        if (account != null && account.isOpen()){
-            account.addTransaction(transaction);
-            return true;
-        }
-        return false;
-
-    }
-
-    public Map<Date, Transaction> getTransactionsForAccount(String accountName){
-        Map<Date, Transaction> transactions = new TreeMap<>();
-        Account account = getAccountByName(accountName);
-        if(account != null){
-            return account.getTransactionHistory();
-        }
-        return transactions;
-    }
-
-    public Map<Date, Float> getBalancesForAccount(String accountName){
-        Map<Date, Float> balances = new TreeMap<>();
-        Account account = getAccountByName(accountName);
-        if (account != null) {
-            balances =  getAccountByName(accountName).getBalanceHistory();
-        }
-        return balances;
-    }
-
-    public Account getAccountByName(String accountName){
-        for (Account a : getAllAccounts()){
-            if (a.getName().equals(accountName)){
-                return a;
-            }
-        }
-        return null;
-    }
-
-    public boolean markAccountAsClosed(String accountName){
-        Account account = getAccountByName(accountName);
-        if (account == null || !account.isOpen()){
-            return false;
-        }
-        account.setOpen(false);
-        return true;
-    }
-
-    public float calculateTotalAccountEarningPercentage(String accountName){
-        //TODO: Return null or 0 if not an account?
-        return getAccountByName(accountName).getTotalEarningsPercentage();
     }
 
     public boolean isAccountOpen(String accountName){
@@ -85,7 +34,73 @@ public class AccountController {
         }
     }
 
-    public void addAccountToRepository(Account account){
+    public boolean markAccountAsClosed(String accountName){
+        Account account = getAccountByName(accountName);
+        if (account == null || !account.isOpen()){
+            return false;
+        }
+        account.setOpen(false);
+        return true;
+    }
+
+    public Account getAccountByName(String accountName){
+        for (Account a : getAllAccounts()){
+            if (a.getName().equals(accountName)){
+                return a;
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param accountType
+     * @return a List of all accounts that are of the type accountType
+     */
+    public List<Account> getAccountsOfType(AccountType accountType){
+        List<Account> accounts = new ArrayList<>();
+        for (Account account : accountRepository.getAllAccounts()){
+            if (account.getAccountType().equals(accountType)){
+                accounts.add(account);
+            }
+        }
+        return accounts;
+    }
+
+
+    public Map<Date, Float> getBalancesForAccount(String accountName){
+        Map<Date, Float> balances = new TreeMap<>();
+        Account account = getAccountByName(accountName);
+        if (account != null) {
+            balances =  getAccountByName(accountName).getBalanceHistory();
+        }
+        return balances;
+    }
+
+    public float calculateTotalAccountEarningPercentage(String accountName){
+        //TODO: Return null or 0 if not an account?
+        return getAccountByName(accountName).getTotalEarningsPercentage();
+    }
+
+    public boolean addTransactionToAccount(Transaction transaction, String accountName){
+        Account account = getAccountByName(accountName);
+        if (account != null && account.isOpen()){
+            account.addTransaction(transaction);
+            return true;
+        }
+        return false;
+    }
+
+    public Map<Date, Transaction> getTransactionsForAccount(String accountName){
+        Map<Date, Transaction> transactions = new TreeMap<>();
+        Account account = getAccountByName(accountName);
+        if(account != null){
+            return account.getTransactionHistory();
+        }
+        return transactions;
+    }
+
+    private void addAccountToRepository(Account account){
         accountRepository.addAccount(account);
     }
 
