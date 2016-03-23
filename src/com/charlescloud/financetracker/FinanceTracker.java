@@ -171,10 +171,10 @@ public class FinanceTracker {
                     break;
                 case "vs":
                     if (checkForAccounts()) {
-                        Map<Return, Account> floatAccountMap = accountController.getAccountsSortedByReturn();
-                        for (Map.Entry<Return, Account> entry : floatAccountMap.entrySet()){
+                        List<Account> accountsSortedByReturn = accountController.getAccountsSortedByReturn();
+                        for (Account account : accountsSortedByReturn){
                             System.out.printf("Earning Percentage: %f, Account: %s %n%n",
-                                entry.getKey().getReturnPercentage(), entry.getValue().toString());
+                                account.getTotalEarningsPercentage(), account.toString());
                         }
                     }
                     break;

@@ -20,12 +20,29 @@ public class AccountController {
         this.accountRepository = accountRepository;
     }
 
+    /**
+     *
+     * @param name
+     * @param provider
+     * @param id
+     * @param taxable
+     * @param purchaseCost
+     * @param balance
+     * @param open
+     * @param accountType
+     * @return
+     */
     public Account createNewAccount(String name, String provider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType){
         Account account = new Account(name, provider, id, taxable, purchaseCost, balance, open, accountType);
         addAccountToRepository(account);
         return account;
     }
 
+    /**
+     * Returns whether the account is open
+     * @param accountName
+     * @return
+     */
     public boolean isAccountOpen(String accountName){
         Account account = getAccountByName(accountName);
         if(account != null) {
@@ -35,6 +52,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * Marks the account as closed if it exists
+     * @param accountName
+     * @return true if account was able to be closed, false otherwise
+     */
     public boolean markAccountAsClosed(String accountName){
         Account account = getAccountByName(accountName);
         if (account == null || !account.isOpen()){
@@ -44,6 +66,11 @@ public class AccountController {
         return true;
     }
 
+    /**
+     * Returns the account object for the specified name
+     * @param accountName
+     * @return Account corresponding to name given
+     */
     public Account getAccountByName(String accountName){
         for (Account a : getAllAccounts()){
             if (a.getName().equals(accountName)){
@@ -72,15 +99,17 @@ public class AccountController {
      *
      * @return
      */
-    public Map<Return, Account> getAccountsSortedByReturn(){
-        Map<Return, Account> returnAccountMap = new TreeMap<>();
-        for (Account account : getAllAccounts()){
-            returnAccountMap.put(account.getAccountReturn(), account);
-        }
-        return  returnAccountMap;
+    public List<Account> getAccountsSortedByReturn(){
+        List<Account> accountList = new ArrayList<>(getAllAccounts());
+        Collections.sort(accountList, (a1, a2) -> Float.compare(a1.getAccountReturn().getReturnPercentage(), a2.getAccountReturn().getReturnPercentage()));
+        return  accountList;
     }
 
-
+    /**
+     *
+     * @param accountName
+     * @return
+     */
     public Map<Date, Float> getBalancesForAccount(String accountName){
         Map<Date, Float> balances = new TreeMap<>();
         Account account = getAccountByName(accountName);
@@ -90,11 +119,26 @@ public class AccountController {
         return balances;
     }
 
+    /**
+     *
+     * @param accountName
+     * @return
+     */
     public float calculateTotalAccountEarningPercentage(String accountName){
         //TODO: Return null or 0 if not an account?
-        return getAccountByName(accountName).getTotalEarningsPercentage();
+        Account account = getAccountByName(accountName);
+        if (account != null) {
+            return account.getTotalEarningsPercentage();
+        }
+        return 0;
     }
 
+    /**
+     *
+     * @param transaction
+     * @param accountName
+     * @return
+     */
     public boolean addTransactionToAccount(Transaction transaction, String accountName){
         Account account = getAccountByName(accountName);
         if (account != null && account.isOpen()){
@@ -104,6 +148,11 @@ public class AccountController {
         return false;
     }
 
+    /**
+     *
+     * @param accountName
+     * @return
+     */
     public Map<Date, Transaction> getTransactionsForAccount(String accountName){
         Map<Date, Transaction> transactions = new TreeMap<>();
         Account account = getAccountByName(accountName);
