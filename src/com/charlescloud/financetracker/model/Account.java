@@ -1,6 +1,6 @@
 package com.charlescloud.financetracker.model;
 
-import com.charlescloud.financetracker.AccountCalculator;
+import com.charlescloud.financetracker.ReturnCalculator;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,12 +16,10 @@ public class Account implements Serializable {
     private Float purchaseCost;
     private Float balance;
     private boolean open;
+    private AccountType accountType;
     private Return accountReturn;
     private Map<Date, Float> balanceHistory;
     private Map<Date, Transaction> transactionHistory;
-    private AccountType accountType;
-
-    private AccountCalculator accountCalculator;
 
 
     public Account(String name, String accountProvider, int id, boolean taxable, Float purchaseCost, Float balance, boolean open, AccountType accountType) {
@@ -36,12 +34,12 @@ public class Account implements Serializable {
 
         balanceHistory = new TreeMap<>();
         transactionHistory = new TreeMap<>();
-        accountCalculator = new AccountCalculator();
 
-        addTransaction(new Transaction(new Date(),TransactionType.ACCOUNT_OPEN,balance,false));
         lastUpdated = new Date();
+        accountReturn = new Return(purchaseCost,balance);
 
-        accountReturn = new Return();
+        //Add an initial account opening transaction upon construction
+        addTransaction(new Transaction(lastUpdated,TransactionType.ACCOUNT_OPEN,balance,false));
     }
 
     public void addTransaction(Transaction transaction){
@@ -62,7 +60,7 @@ public class Account implements Serializable {
                 break;
             case CONTRIBUTION:
                 //Updating the purchase cost
-                purchaseCost += transaction.getAmount();
+                setPurchaseCost(purchaseCost += transaction.getAmount());
                 break;
             //TODO: Make sure you have enough cash to not go negative?
             case WITHDRAWAL:
@@ -75,11 +73,10 @@ public class Account implements Serializable {
 
     private void addBalanceUpdate(Date date, Float balance){
         balanceHistory.put(date, balance);
-        this.balance = balance;
+        setBalance(balance);
     }
 
     public float getTotalEarningsPercentage(){
-        accountReturn.setReturnPercentage(accountCalculator.calculateTotalEarningsPercentage(this.purchaseCost, this.balance));
         return accountReturn.getReturnPercentage();
     }
 
@@ -117,6 +114,7 @@ public class Account implements Serializable {
 
     public void setBalance(Float balance) {
         this.balance = balance;
+        accountReturn.setEnding(balance);
     }
 
     public boolean isOpen() {
@@ -139,8 +137,20 @@ public class Account implements Serializable {
         return accountType;
     }
 
+    public String getAccountProvider() {
+        return accountProvider;
+    }
+
+    public void setAccountProvider(String accountProvider) {
+        this.accountProvider = accountProvider;
+    }
+
+    public void setPurchaseCost(Float purchaseCost) {
+        this.purchaseCost = purchaseCost;
+        accountReturn.setStarting(purchaseCost);
+    }
+
     public Return getAccountReturn() {
-        accountReturn.setReturnPercentage(accountCalculator.calculateTotalEarningsPercentage(this.purchaseCost, this.balance));
         return accountReturn;
     }
 

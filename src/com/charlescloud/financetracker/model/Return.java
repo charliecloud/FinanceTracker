@@ -1,28 +1,50 @@
 package com.charlescloud.financetracker.model;
 
 
+import com.charlescloud.financetracker.ReturnCalculator;
+
 import java.io.Serializable;
 
 public class Return implements Comparable, Serializable {
-    private float returnPercentage;
+    private ReturnCalculator returnCalculator;
+    private float starting;
+    private float ending;
 
-    public Return(float returnPercentage) {
-        this.returnPercentage = returnPercentage;
+
+    public Return(ReturnCalculator returnCalculator, float starting, float ending) {
+        this.returnCalculator = returnCalculator;
+        this.starting = starting;
+        this.ending = ending;
     }
 
-    public Return() {
+    public Return(float starting, float ending) {
+        this.starting = starting;
+        this.ending = ending;
+        returnCalculator = new ReturnCalculator();
     }
 
     public float getReturnPercentage() {
-        return returnPercentage;
+        return returnCalculator.calculateTotalEarningsPercentage(starting,ending);
     }
 
-    public void setReturnPercentage(float returnPercentage) {
-        this.returnPercentage = returnPercentage;
+    public float getStarting() {
+        return starting;
+    }
+
+    public void setStarting(float starting) {
+        this.starting = starting;
+    }
+
+    public float getEnding() {
+        return ending;
+    }
+
+    public void setEnding(float ending) {
+        this.ending = ending;
     }
 
     @Override
     public int compareTo(Object o) {
-        return Float.compare(returnPercentage, ((Return) o).getReturnPercentage());
+        return Float.compare(this.getReturnPercentage(), ((Return) o).getReturnPercentage());
     }
 }
