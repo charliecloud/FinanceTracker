@@ -1,4 +1,4 @@
-package com.charlescloud.financetracker;
+package com.charlescloud.financetracker.model;
 
 import java.io.Serializable;
 

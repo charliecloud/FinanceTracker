@@ -1,5 +1,6 @@
 package com.charlescloud.financetracker;
 
+import com.charlescloud.financetracker.model.ReturnCalculator;
 import org.junit.Before;
 import org.junit.Test;
 

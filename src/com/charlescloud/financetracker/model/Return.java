@@ -1,8 +1,6 @@
 package com.charlescloud.financetracker.model;
 
 
-import com.charlescloud.financetracker.ReturnCalculator;
-
 import java.io.Serializable;
 
 public class Return implements Comparable, Serializable {

@@ -1,7 +1,5 @@
 package com.charlescloud.financetracker.model;
 
-import com.charlescloud.financetracker.ReturnCalculator;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
