@@ -3,6 +3,7 @@ package com.charlescloud.financetracker.controller;
 import com.charlescloud.financetracker.data.AccountRepository;
 import com.charlescloud.financetracker.model.Account;
 import com.charlescloud.financetracker.model.AccountType;
+import com.charlescloud.financetracker.model.Return;
 import com.charlescloud.financetracker.model.Transaction;
 
 import java.util.*;
@@ -65,6 +66,18 @@ public class AccountController {
             }
         }
         return accounts;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Map<Return, Account> getAccountsSortedByReturn(){
+        Map<Return, Account> returnAccountMap = new TreeMap<>();
+        for (Account account : getAllAccounts()){
+            returnAccountMap.put(account.getAccountReturn(), account);
+        }
+        return  returnAccountMap;
     }
 
 

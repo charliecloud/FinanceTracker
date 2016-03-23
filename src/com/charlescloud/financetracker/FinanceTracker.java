@@ -2,10 +2,7 @@ package com.charlescloud.financetracker;
 
 import com.charlescloud.financetracker.controller.AccountController;
 import com.charlescloud.financetracker.controller.TransactionController;
-import com.charlescloud.financetracker.model.Account;
-import com.charlescloud.financetracker.model.AccountType;
-import com.charlescloud.financetracker.model.Transaction;
-import com.charlescloud.financetracker.model.TransactionType;
+import com.charlescloud.financetracker.model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -137,6 +134,14 @@ public class FinanceTracker {
                         }
                     }
                     break;
+                case "vp":
+                    if (checkForAccounts()) {
+                        printAllAccounts(accountController);
+                        String accountView = bufferedReader.readLine();
+                        System.out.printf("Current earning percentage is: %f %n%n",
+                                accountController.calculateTotalAccountEarningPercentage(accountView));
+                    }
+                    break;
                 case "q":
                     accountController.saveAccounts("financetracker.accounts");
                     transactionController.saveTransactions("financetracker.transactions");
@@ -164,6 +169,15 @@ public class FinanceTracker {
                         }
                     }
                     break;
+                case "vs":
+                    if (checkForAccounts()) {
+                        Map<Return, Account> floatAccountMap = accountController.getAccountsSortedByReturn();
+                        for (Map.Entry<Return, Account> entry : floatAccountMap.entrySet()){
+                            System.out.printf("Earning Percentage: %f, Account: %s %n%n",
+                                entry.getKey().getReturnPercentage(), entry.getValue().toString());
+                        }
+                    }
+                    break;
                 default:
 
             }
@@ -176,9 +190,11 @@ public class FinanceTracker {
         menuOptions.add("add transaction for account = at");
         menuOptions.add("view account transaction history = vt");
         menuOptions.add("view account balance history = vb");
+        menuOptions.add("view account performance = vp");
         menuOptions.add("close account = c");
         menuOptions.add("get all transactions of a certain type = gt");
         menuOptions.add("view all accounts of a certain type = va");
+        menuOptions.add("view sorted performance of all accounts= vs");
         menuOptions.add("quit = q");
     }
 

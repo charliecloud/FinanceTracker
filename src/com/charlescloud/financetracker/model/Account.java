@@ -16,6 +16,7 @@ public class Account implements Serializable {
     private Float purchaseCost;
     private Float balance;
     private boolean open;
+    private Return accountReturn;
     private Map<Date, Float> balanceHistory;
     private Map<Date, Transaction> transactionHistory;
     private AccountType accountType;
@@ -39,6 +40,8 @@ public class Account implements Serializable {
 
         addTransaction(new Transaction(new Date(),TransactionType.ACCOUNT_OPEN,balance,false));
         lastUpdated = new Date();
+
+        accountReturn = new Return();
     }
 
     public void addTransaction(Transaction transaction){
@@ -76,7 +79,8 @@ public class Account implements Serializable {
     }
 
     public float getTotalEarningsPercentage(){
-        return accountCalculator.calculateTotalEarningsPercentage(this.purchaseCost, this.balance);
+        accountReturn.setReturnPercentage(accountCalculator.calculateTotalEarningsPercentage(this.purchaseCost, this.balance));
+        return accountReturn.getReturnPercentage();
     }
 
     public String getName() {
@@ -133,6 +137,15 @@ public class Account implements Serializable {
 
     public AccountType getAccountType() {
         return accountType;
+    }
+
+    public Return getAccountReturn() {
+        accountReturn.setReturnPercentage(accountCalculator.calculateTotalEarningsPercentage(this.purchaseCost, this.balance));
+        return accountReturn;
+    }
+
+    public void setAccountReturn(Return accountReturn) {
+        this.accountReturn = accountReturn;
     }
 
     //TODO: Rewrite this to look nicer.
