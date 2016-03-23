@@ -46,7 +46,7 @@ public class FinanceTracker {
                 case "a":
                     String accountInfo;
                     do {
-                        System.out.println("Enter account information: name, provider, id, purchase cost, balance, open, account type");
+                        System.out.println("Enter account information: name, provider, id, taxable?, purchase cost, balance, open?, account type");
                         accountInfo = bufferedReader.readLine();
                     } while (accountInfo == null);
 
@@ -56,12 +56,13 @@ public class FinanceTracker {
                     String name = input[0];
                     String provider = input[1];
                     int id = Integer.parseInt(input[2]);
-                    Float purchaseCost = Float.parseFloat(input[3]);
-                    Float balance = Float.parseFloat(input[4]);
-                    boolean open = Boolean.parseBoolean(input[5]);
-                    AccountType accountType = AccountType.valueOf(input[6]);
+                    boolean taxable = Boolean.parseBoolean(input[3]);
+                    Float purchaseCost = Float.parseFloat(input[4]);
+                    Float balance = Float.parseFloat(input[5]);
+                    boolean open = Boolean.parseBoolean(input[6]);
+                    AccountType accountType = AccountType.valueOf(input[7]);
                     //
-                    accountController.createNewAccount(name, provider, id, true, purchaseCost, balance, open, accountType);
+                    accountController.createNewAccount(name, provider, id, taxable, purchaseCost, balance, open, accountType);
                     transactionController.createTransaction(new Date(), TransactionType.ACCOUNT_OPEN, balance, false);
                     break;
                 case "at":
