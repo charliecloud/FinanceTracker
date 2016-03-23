@@ -158,15 +158,8 @@ public class Account implements Serializable {
         this.accountReturn = accountReturn;
     }
 
-    //TODO: Rewrite this to look nicer.
     @Override
     public String toString() {
-        return "Account{" +
-                "accountType=" + accountType +
-                ", open=" + open +
-                ", balance=" + balance +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "Account Name is: "+this.getName()+" Type is: "+this.getAccountType()+" Provider is: "+getAccountProvider()+" Last Updated: "+getLastUpdated();
     }
 }

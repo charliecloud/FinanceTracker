@@ -83,7 +83,7 @@ public class FinanceTracker {
                             System.out.printf("Transaction created %n");
                         }
                         else{
-                            System.out.printf("Account: %s is closed or does not exist %n ", accountChosen);
+                            System.out.printf("Account: %s is closed or does not exist %n%n", accountChosen);
                         }
                     }
                     break;
@@ -116,9 +116,9 @@ public class FinanceTracker {
                         printAllAccounts(accountController);
                         String accountView = bufferedReader.readLine();
                         for (Map.Entry<Date, Float> bHistory : accountController.getBalancesForAccount(accountView).entrySet()) {
-                            System.out.printf("Date is: %s, Balance is %f %n",
-                                    bHistory.getKey().toString(),
-                                    bHistory.getValue());
+                            System.out.printf("Balance is %f, Date is %s %n",
+                                    bHistory.getValue(),
+                                    bHistory.getKey());
                         }
                     }
                     break;
@@ -173,7 +173,7 @@ public class FinanceTracker {
                     if (checkForAccounts()) {
                         List<Account> accountsSortedByReturn = accountController.getAccountsSortedByReturn();
                         for (Account account : accountsSortedByReturn){
-                            System.out.printf("Earning Percentage: %f, Account: %s %n%n",
+                            System.out.printf("Earning Percentage: %f, Account: %s %n",
                                 account.getTotalEarningsPercentage(), account.toString());
                         }
                     }
