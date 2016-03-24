@@ -125,7 +125,6 @@ public class AccountController {
      * @return
      */
     public float calculateTotalAccountEarningPercentage(String accountName){
-        //TODO: Return null or 0 if not an account?
         Account account = getAccountByName(accountName);
         if (account != null) {
             return account.getTotalEarningsPercentage();

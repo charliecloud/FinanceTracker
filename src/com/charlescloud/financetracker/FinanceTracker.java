@@ -48,11 +48,12 @@ public class FinanceTracker {
                     do {
                         System.out.println("Enter account information: name, provider, id, taxable?, purchase cost, balance, open?, account type");
                         accountInfo = bufferedReader.readLine();
-                    } while (accountInfo == null);
+                    } while ((accountInfo == null || (accountInfo.split(" ").length != 8)) && !accountInfo.equals("q"));
+
+                    if (accountInfo.equals("q")) break;
 
                     String[] input = accountInfo.split(" ");
 
-                    //TODO: Check for correct amount of input and sanitize it
                     String name = input[0];
                     String provider = input[1];
                     int id = Integer.parseInt(input[2]);
@@ -108,6 +109,7 @@ public class FinanceTracker {
                         for (Map.Entry<Date, Transaction> tHistory : accountController.getTransactionsForAccount(accountView).entrySet()) {
                             System.out.println(tHistory.getValue());
                         }
+                        //TODO: Output balance also
                         System.out.printf("Current earning percentage is: %f %n%n",
                                 accountController.calculateTotalAccountEarningPercentage(accountView));
                     }
